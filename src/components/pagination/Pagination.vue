@@ -11,7 +11,7 @@
           <span aria-hidden="true">&lsaquo;</span>
         </a>
       </li>
-      <li :class="{disabled:disabled}" v-if="sliceStart>0">
+      <li :class="{disabled:disabled}" v-if="sliceStart>0 && maxSize>0">
         <a href="#" role="button" aria-label="Previous group" @click.prevent="toPage(1)">
           <span aria-hidden="true">&hellip;</span>
         </a>
@@ -19,7 +19,7 @@
       <li v-for="item in sliceArray" :key="item" :class="{active:value===item+1,disabled:disabled}">
         <a href="#" role="button" @click.prevent="onPageChange(item + 1)">{{item + 1}}</a>
       </li>
-      <li :class="{disabled:disabled}" v-if="sliceStart<totalPage-maxSize">
+      <li :class="{disabled:disabled}" v-if="sliceStart<totalPage-maxSize && maxSize>0">
         <a href="#" role="button" aria-label="Next group" @click.prevent="toPage(0)">
           <span aria-hidden="true">&hellip;</span>
         </a>
