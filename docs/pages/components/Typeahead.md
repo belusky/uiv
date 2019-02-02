@@ -161,6 +161,40 @@ An example using `async-src`:
 <!-- typeahead-async-query.vue -->
 ```
 
+## Custom test function
+
+An example using `custom-test-function`:
+
+```html
+<template>
+  <section>
+    <label for="input-6">States of America:</label>
+    <input id="input-6" class="form-control" type="text" placeholder="Type to search...">
+    <typeahead v-model="model" target="#input-6" :data="states" :custom-match-function="testFunction" force-select open-on-empty open-on-focus :limit="3" item-key="name"/>
+    <br/>
+    <alert v-show="model">You selected {{model}}</alert>
+  </section>
+</template>
+<script>
+  export default {
+    data () {
+      return {
+        model: '',
+        states: states.data // import states from '../../assets/data/states.json'
+      }
+    },
+    methods: {
+      testFunction (input, label, item) {
+        console.log(item)
+        return ~label.indexOf(input)
+      }
+    }
+  }
+</script>
+<!-- typeahead-custom-test-function.vue -->
+```
+
+
 ## Custom template
 
 Use the `item` scoped slot to override the typeahead item's template.
@@ -178,7 +212,7 @@ An example with custom template and `async-function`:
   <section>
     <label for="input-5">Users of Github:</label>
     <input id="input-5" class="form-control" type="text" placeholder="Type to search...">
-    <typeahead v-model="model" target="#input-5" :async-function="queryFunction" item-key="login">
+    <typeahead v-model="model" target="#input-5" :async-function="queryFunction" item-key="login" :limit="1000" class="scrollable-list">
       <template slot="item" slot-scope="props">
         <li v-for="(item, index) in props.items" :class="{active:props.activeIndex===index}">
           <a role="button" @click="props.select(item)">
@@ -214,6 +248,12 @@ An example with custom template and `async-function`:
     }
   }
 </script>
+<style>
+  .scrollable-list .dropdown-menu {
+    max-height: 150px;
+    overflow-y: auto;
+  }
+</style>
 <!-- typeahead-custom-template.vue -->
 ```
 

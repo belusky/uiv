@@ -3120,7 +3120,8 @@ var Typeahead = { render: function render() {
     preselect: {
       type: Boolean,
       default: true
-    }
+    },
+    customMatchFunction: Function
   },
   data: function data() {
     return {
@@ -3237,13 +3238,19 @@ var Typeahead = { render: function render() {
         var key = this.itemKey ? item[this.itemKey] : item;
         key = key.toString();
         var index = -1;
-        if (this.ignoreCase) {
-          index = key.toLowerCase().indexOf(this.inputEl.value.toLowerCase());
+        if (this.customMatchFunction) {
+          if (this.customMatchFunction(this.inputEl.value, key, item)) {
+            this.items.push(item);
+          }
         } else {
-          index = key.indexOf(this.inputEl.value);
-        }
-        if (this.matchStart ? index === 0 : index >= 0) {
-          this.items.push(item);
+          if (this.ignoreCase) {
+            index = key.toLowerCase().indexOf(this.inputEl.value.toLowerCase());
+          } else {
+            index = key.indexOf(this.inputEl.value);
+          }
+          if (this.matchStart ? index === 0 : index >= 0) {
+            this.items.push(item);
+          }
         }
         if (this.items.length >= this.limit) {
           break;
